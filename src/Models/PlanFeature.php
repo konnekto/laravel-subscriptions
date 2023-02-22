@@ -62,6 +62,8 @@ class PlanFeature extends Model implements Sortable
     use HasTranslations;
     use ValidatingTrait;
 
+    protected $with = ['usage'];
+
     /**
      * {@inheritdoc}
      */
