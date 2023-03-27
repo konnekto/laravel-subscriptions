@@ -102,16 +102,22 @@ trait HasPlanSubscriptions
      * @param string                            $subscription
      * @param \Rinvex\Subscriptions\Models\Plan $plan
      * @param \Carbon\Carbon|null               $startDate
+     * @param string|null                       $description
      *
      * @return \Rinvex\Subscriptions\Models\PlanSubscription
      */
-    public function newPlanSubscription($subscription, Plan $plan, Carbon $startDate = null): PlanSubscription
-    {
+    public function newPlanSubscription(
+        $subscription,
+        Plan   $plan,
+        Carbon $startDate = null,
+        ?string $description = null
+    ): PlanSubscription {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period, $trial->getEndDate());
 
         return $this->planSubscriptions()->create([
             'name' => $subscription,
+            'description' => $description,
             'plan_id' => $plan->getKey(),
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
