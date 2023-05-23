@@ -83,6 +83,18 @@ trait HasPlanSubscriptions
     }
 
     /**
+     * Get all subscribed plans including active and inactive subscription.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function allSubscribedPlans(): Collection
+    {
+        $planIds = $this->planSubscriptions->pluck('plan_id')->unique();
+
+        return app('rinvex.subscriptions.plan')->whereIn('id', $planIds)->get();
+    }
+
+    /**
      * Check if the subscriber subscribed to the given plan.
      *
      * @param int $planId
