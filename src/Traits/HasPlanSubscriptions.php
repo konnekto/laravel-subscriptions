@@ -122,7 +122,8 @@ trait HasPlanSubscriptions
         $subscription,
         Plan   $plan,
         Carbon $startDate = null,
-        ?string $description = null
+        ?string $description = null,
+        bool $useTrialEndDate = false
     ): PlanSubscription {
         $trial = new Period($plan->trial_interval, $plan->trial_period, $startDate ?? now());
         $period = new Period($plan->invoice_interval, $plan->invoice_period, $trial->getEndDate());
@@ -133,7 +134,7 @@ trait HasPlanSubscriptions
             'plan_id' => $plan->getKey(),
             'trial_ends_at' => $trial->getEndDate(),
             'starts_at' => $period->getStartDate(),
-            'ends_at' => $period->getEndDate(),
+            'ends_at' => $useTrialEndDate ? $trial->getEndDate() : $period->getEndDate(),
         ]);
     }
 }
