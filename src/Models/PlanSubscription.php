@@ -279,6 +279,7 @@ class PlanSubscription extends Model
 
         if ($immediately) {
             $this->ends_at = $this->canceled_at;
+            $this->trial_ends_at = $this->canceled_at;
         }
 
         $this->save();
